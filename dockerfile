@@ -1,5 +1,5 @@
 # ════════════════════════════════════════════════════════════
-# 🌙 by_moon — Djezzy Bot v13 (666gb_pro2)
+# 🌙 by_moon — Djezzy Bot v13 (666gb_pro2) — Choreo Ready
 # ════════════════════════════════════════════════════════════
 FROM node:20-alpine
 
@@ -16,7 +16,7 @@ RUN apk add --no-cache tini curl ca-certificates tzdata && \
 # ── مجلد العمل ──────────────────────────────────────────────
 WORKDIR /app
 
-# ── التبعيات أولاً (cache) ─────────────────────────────────
+# ── التبعيات أولاً (cache الطبقات) ─────────────────────────
 COPY package*.json ./
 RUN npm install --omit=dev --no-audit --no-fund --loglevel=error && \
     npm cache clean --force
@@ -24,16 +24,24 @@ RUN npm install --omit=dev --no-audit --no-fund --loglevel=error && \
 # ── الكود المصدري ──────────────────────────────────────────
 COPY 666gb_pro2.js ./
 
-# ── مجلد البيانات ──────────────────────────────────────────
-RUN mkdir -p /app/data && chown -R node:node /app
+# ── إنشاء مستخدم بمعرّف UID متوافق مع Choreo ───────────────
+# Choreo يتطلب أن يكون UID بين 10000 و 20000
+RUN addgroup -g 10014 -S appgroup && \
+    adduser -u 10014 -S -G appgroup -h /app -s /sbin/nologin appuser
 
-# ── مستخدم غير root ───────────────────────────────────────
-USER node
+# ── مجلد البيانات + الصلاحيات ──────────────────────────────
+RUN mkdir -p /app/data && \
+    chown -R 10014:10014 /app
 
-# ── متغيرات بيئة ───────────────────────────────────────────
+# ── التبديل إلى المستخدم غير root ──────────────────────────
+USER 10014
+
+# ── متغيرات البيئة ─────────────────────────────────────────
 ENV NODE_ENV=production \
     NODE_OPTIONS="--max-old-space-size=512" \
-    TZ=Africa/Algiers
+    TZ=Africa/Algiers \
+    DATA_DIR=/app/data \
+    SKIP_DEP_INSTALL=1
 
 # ── فحص الصحة ──────────────────────────────────────────────
 HEALTHCHECK --interval=60s --timeout=10s --start-period=30s --retries=3 \
