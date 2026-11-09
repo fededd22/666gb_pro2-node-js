@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  bot-666gb-pro2:
+    build: .
+    image: 666gb_pro2:v13
+    container_name: 666gb_pro2_bot
+    restart: unless-stopped
+    environment:
+      - TZ=Africa/Algiers
+      - NODE_OPTIONS=--max-old-space-size=512
+    volumes:
+      - ./data:/app/data
+      - ./bot_data.json:/app/bot_data.json
+      - ./proxies.json:/app/proxies.json
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
