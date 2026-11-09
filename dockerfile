@@ -13,9 +13,10 @@ RUN apk add --no-cache tini curl ca-certificates tzdata && \
     echo "Africa/Algiers" > /etc/timezone && \
     update-ca-certificates
 
-# ── تحديث npm لحل ثغرة CVE-2026-59873 في tar ──────────────
-# نقوم بتحديث npm إلى أحدث إصدار لضمان احتوائه على tar >= 7.5.19
-RUN npm install -g npm@latest
+# ── تحديث npm إلى الإصدار 11 ────────────────────────────────
+# npm@11 هو آخر إصدار رئيسي يدعم Node 20
+# يحتوي على tar@7.5.19+ مما يحل ثغرة CVE-2026-59873
+RUN npm install -g npm@11
 
 # ── مجلد العمل ──────────────────────────────────────────────
 WORKDIR /app
