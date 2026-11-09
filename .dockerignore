@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+bot_data.json
+proxies.json
+.git
+.gitignore
+*.md
+.env
+.DS_Store
