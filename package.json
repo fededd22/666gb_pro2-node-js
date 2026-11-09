@@ -1,0 +1,17 @@
+{
+  "name": "666gb-pro2-bot",
+  "version": "13.0.0",
+  "description": "Djezzy Telegram Bot v13 — 666gb_pro2",
+  "main": "666gb_pro2.js",
+  "scripts": {
+    "start": "node 666gb_pro2.js"
+  },
+  "dependencies": {
+    "grammy": "^1.30.0",
+    "undici": "^6.19.0",
+    "socks-proxy-agent": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
